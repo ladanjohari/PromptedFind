@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>PromptFind</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="icon-button" type="button" aria-label="Menu">
+          <span class="menu-icon"></span>
+        </button>
+        <div class="youtube-brand" aria-label="YouTube">
+          <span class="youtube-badge"></span>
+          <span class="youtube-wordmark">YouTube</span>
+        </div>
+      </div>
+
+      <div class="topbar-search">
+        <input
+          id="topbarSearchInput"
+          class="topbar-input"
+          type="text"
+          placeholder="Search"
+        />
+        <button class="search-button" type="button" aria-label="Search">
+          <svg
+            class="search-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle
+              cx="11"
+              cy="11"
+              r="7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <line
+              x1="16.65"
+              y1="16.65"
+              x2="21"
+              y2="21"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="watch-layout">
+        <div class="watch-main">
+          <div class="player-shell">
+            <div class="video-frame">
+              <iframe
+                id="videoFrame"
+                title="YouTube video player"
+                src="https://www.youtube.com/embed/b9VX6qipe84?start=0&rel=0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+          <div class="moment-timeline" aria-label="PromptFind video moments">
+            <div id="timelineRail" class="timeline-rail"></div>
+          </div>
+
+          <section class="video-meta">
+            <h1 class="video-title">The new symbol browser experience in Xcode</h1>
+
+            <div class="watch-row">
+              <div class="channel-block">
+                <div class="channel-avatar" aria-hidden="true">LJ</div>
+                <div class="channel-copy">
+                  <p class="channel-name">Ladan Johari</p>
+                  <p class="channel-stats">9 subscribers</p>
+                </div>
+              </div>
+
+              <div class="action-row">
+                <button class="pill-button" type="button">Analytics</button>
+                <button class="pill-button" type="button">Edit video</button>
+              </div>
+            </div>
+
+            <div class="watch-row secondary">
+              <div class="reaction-group">
+                <button class="icon-pill" type="button">2</button>
+                <button class="icon-pill" type="button">Share</button>
+                <button class="icon-pill" type="button">Promote</button>
+                <button class="icon-pill" type="button">Ask</button>
+              </div>
+            </div>
+
+            <section class="description-card">
+              <p class="video-stats">144 views 1 year ago</p>
+              <p class="video-summary">No description has been added to this video.</p>
+              <p class="video-more">...more</p>
+            </section>
+
+            <section class="comments-block">
+              <div class="comments-header">
+                <h2 class="comments-title">0 Comments</h2>
+                <p class="comments-sort">Sort by</p>
+              </div>
+              <div class="comment-entry">
+                <div class="comment-avatar" aria-hidden="true">LJ</div>
+                <p class="comment-placeholder">Add a comment...</p>
+              </div>
+            </section>
+
+            <div class="video-actions promptfind-meta">
+              <p id="activeTimestamp" class="video-note">Selected timestamp: 0:00</p>
+              <a
+                id="openVideoLink"
+                class="video-link"
+                href="https://www.youtube.com/watch?v=b9VX6qipe84&t=0s"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Open this moment on YouTube
+              </a>
+            </div>
+          </section>
+        </div>
+
+        <aside class="watch-sidebar">
+          <section class="results-panel">
+            <div class="results-header">
+              <h2>Ask about this video</h2>
+              <button class="close-button" type="button" aria-label="Close panel">×</button>
+            </div>
+
+            <div class="ask-intro">
+              <div class="sparkle-mark" aria-hidden="true">✦</div>
+              <p class="search-hint">
+                PromptFind turns findings into navigation. Search the mock transcript and
+                jump directly to the relevant moment.
+              </p>
+            </div>
+
+            <p id="resultsCount" class="panel-meta">0 matches</p>
+
+            <div id="resultsList" class="results-list"></div>
+
+            <div class="panel-footer">
+              <p id="jumpStatus" class="jump-status">Select a result to jump in the video.</p>
+              <label class="sr-only" for="panelQueryInput">Ask about this video</label>
+              <div class="panel-input-row">
+                <input
+                  id="panelQueryInput"
+                  class="panel-query-input"
+                  type="text"
+                  placeholder="Ask a question..."
+                />
+                <button class="panel-send-button" type="button" aria-label="Send question">
+                  <svg
+                    class="send-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path
+                      d="M4 20L20 12L4 4L7 12L4 20Z"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <p class="panel-note">Mock data only for this step.</p>
+            </div>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <template id="resultTemplate">
+      <button class="result-card" type="button">
+        <div class="result-card-top">
+          <span class="result-time"></span>
+        </div>
+        <p class="result-text"></p>
+      </button>
+    </template>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
