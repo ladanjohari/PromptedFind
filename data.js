@@ -1,68 +1,59 @@
-// Transcript moments for the Xcode symbol browser demo.
-// These timestamps are approximate and can be refined later.
+// Mock AI-style summaries for semantic video ranges.
+// These are hand-written summaries, not real model output.
 const transcriptEntries = [
   {
     id: 1,
     start: 0,
-    end: 7,
+    end: 16,
     label: "0:00-0:07",
-    text: "When you're working on a large Xcode project, you can use Open Quickly to search for a symbol.",
+    title: "Navigation starts with search tradeoffs",
+    summary:
+      "The opening frames the problem: large Xcode projects force you to choose between quick symbol search and slower file-by-file navigation. The video sets up why this workflow feels fragmented.",
   },
   {
     id: 2,
-    start: 8,
-    end: 16,
-    label: "0:08-0:16",
-    text: "You can also scan individual files and use breadcrumbs to jump into a symbol.",
-  },
-  {
-    id: 3,
     start: 17,
     end: 27,
     label: "0:17-0:27",
-    text: "Breadcrumbs are useful, but they take several clicks and do not show a full view of symbols in a target.",
+    title: "Breadcrumbs help, but stay narrow",
+    summary:
+      "This section explains that breadcrumbs are useful for local navigation, but they do not expose the full symbol landscape inside a target. The limitation is less about access and more about visibility.",
   },
   {
-    id: 4,
+    id: 3,
     start: 28,
     end: 38,
     label: "0:28-0:38",
-    text: "Meet the new symbol browser, where navigation starts with top-level symbols like structs, classes, or protocols.",
+    title: "The symbol browser reframes navigation",
+    summary:
+      "The new symbol browser is introduced as a different navigation model. Instead of starting from files, it starts from meaningful code structures like classes, structs, and protocols.",
+  },
+  {
+    id: 4,
+    start: 39,
+    end: 53,
+    label: "0:39-0:53",
+    title: "Organization shifts from files to symbols",
+    summary:
+      "Here the product value becomes clearer: the browser organizes code around the syntax and structure of the codebase rather than the file tree. The pitch is control, not just speed.",
   },
   {
     id: 5,
-    start: 39,
-    end: 47,
-    label: "0:39-0:47",
-    text: "Everything is organized around symbols in the code base, not around the file layout.",
+    start: 54,
+    end: 73,
+    label: "0:54-1:13",
+    title: "Direct access plus filtering reduces friction",
+    summary:
+      "This range focuses on the practical interaction benefits: jumping directly into the syntax tree and filtering by name or symbol type. The experience is positioned as faster, cleaner, and more intentional.",
   },
   {
     id: 6,
-    start: 48,
-    end: 53,
-    label: "0:48-0:53",
-    text: "It is like breadcrumbs, but gives you more control.",
-  },
-  {
-    id: 7,
-    start: 54,
-    end: 63,
-    label: "0:54-1:03",
-    text: "You can jump straight to any node in the syntax tree with no scrolling or extra steps.",
-  },
-  {
-    id: 8,
-    start: 64,
-    end: 73,
-    label: "1:04-1:13",
-    text: "If there is too much information, you can filter by name and symbol type.",
-  },
-  {
-    id: 9,
     start: 74,
     end: 84,
     label: "1:14-1:24",
-    text: "With the new symbol browser, you can browse faster, smarter, and better.",
+    title: "Closing claim: faster, smarter browsing",
+    summary:
+      "The ending compresses the product story into a simple benefit statement. It reinforces that the symbol browser is meant to improve how developers browse code, not just how they search it.",
   },
 ];
 

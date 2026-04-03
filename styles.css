@@ -169,45 +169,50 @@ p {
   background: #000;
 }
 
-.video-frame iframe {
+.video-player {
   width: 100%;
   height: 100%;
   border: 0;
+  display: block;
+  background: #000;
 }
 
 .moment-timeline {
-  padding-top: 10px;
+  padding-top: 6px;
 }
 
 .timeline-rail {
   position: relative;
-  height: 28px;
-  border-radius: 999px;
-  background: linear-gradient(to right, #e5e5e5 0%, #e5e5e5 100%);
+  height: 6px;
+  border-radius: 3px;
+  background: #e5e5e5;
   overflow: visible;
 }
 
-.timeline-rail::before {
+.timeline-progress {
   position: absolute;
-  top: 12px;
-  left: 0;
-  right: 0;
-  height: 4px;
-  border-radius: 999px;
-  background: #d4d4d4;
-  content: "";
+  inset: 0 auto 0 0;
+  width: 0;
+  height: 100%;
+  border-radius: 3px;
+  background: #ff0000;
+  pointer-events: none;
+}
+
+.timeline-segments {
+  position: absolute;
+  inset: 0;
 }
 
 .timeline-segment {
   position: absolute;
-  top: 8px;
-  height: 12px;
+  top: -1px;
+  height: 8px;
   border: 0;
-  border-radius: 999px;
-  background: #ff6b81;
-  box-shadow: none;
+  border-radius: 4px;
+  background: rgba(59, 130, 246, 0.42);
   cursor: pointer;
-  transition: background-color 140ms ease, transform 140ms ease, opacity 140ms ease;
+  transition: background-color 140ms ease, opacity 140ms ease, transform 140ms ease;
 }
 
 .timeline-segment:hover,
@@ -216,11 +221,23 @@ p {
 }
 
 .timeline-segment:hover {
+  opacity: 0.95;
   transform: translateY(-1px);
 }
 
 .timeline-segment.is-active {
-  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+  background: rgba(59, 130, 246, 0.9);
+}
+
+.timeline-playhead {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 2px;
+  height: 14px;
+  background: #0f0f0f;
+  transform: translateX(-1px);
+  pointer-events: none;
 }
 
 .video-meta {
@@ -470,17 +487,37 @@ p {
   margin-bottom: 8px;
 }
 
+.result-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #eef6ff;
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .result-time {
   display: inline-block;
   font-size: 12px;
+  font-weight: 600;
+  color: #606060;
+}
+
+.result-title {
+  margin: 0 0 8px;
+  font-size: 16px;
   font-weight: 700;
-  color: #3ea6ff;
+  line-height: 1.3;
 }
 
 .result-text {
   margin: 0;
-  line-height: 1.45;
-  color: #0f0f0f;
+  line-height: 1.55;
+  color: #2f2f2f;
 }
 
 .empty-state {
@@ -548,6 +585,10 @@ p {
   color: #606060;
   font-size: 12px;
   text-align: center;
+}
+
+.panel-note.is-thinking {
+  color: #2563eb;
 }
 
 .sr-only {

@@ -3,12 +3,21 @@ const topbarSearchInput = document.getElementById("topbarSearchInput");
 const panelQueryInput = document.getElementById("panelQueryInput");
 const resultsList = document.getElementById("resultsList");
 const resultsCount = document.getElementById("resultsCount");
-const videoFrame = document.getElementById("videoFrame");
+const videoPlayer = document.getElementById("videoPlayer");
 const openVideoLink = document.getElementById("openVideoLink");
 const activeTimestamp = document.getElementById("activeTimestamp");
 const resultTemplate = document.getElementById("resultTemplate");
 const jumpStatus = document.getElementById("jumpStatus");
+const panelNote = document.querySelector(".panel-note");
+const panelSendButton = document.getElementById("panelSendButton");
+const panelCloseButton = document.getElementById("panelCloseButton");
 const timelineRail = document.getElementById("timelineRail");
+const timelineProgress = document.getElementById("timelineProgress");
+const timelineSegments = document.getElementById("timelineSegments");
+const timelinePlayhead = document.getElementById("timelinePlayhead");
+let activeSegmentId = null;
+let segmentPlaybackEnd = null;
+let searchTimeoutId = null;
 
 function getSegmentStyle(start, end, duration) {
   return {
@@ -18,7 +27,7 @@ function getSegmentStyle(start, end, duration) {
 }
 
 function renderTimelineSegments(items) {
-  timelineRail.innerHTML = "";
+  timelineSegments.innerHTML = "";
 
   items.forEach((entry) => {
     const segment = document.createElement("button");
@@ -35,39 +44,58 @@ function renderTimelineSegments(items) {
       setActiveMoment(entry, null);
     });
 
-    timelineRail.appendChild(segment);
+    timelineSegments.appendChild(segment);
   });
-}
-
-function buildEmbedUrl(time) {
-  return `https://www.youtube.com/embed/${youtubeVideoId}?start=${time}&rel=0`;
 }
 
 function buildWatchUrl(time) {
-  return `https://www.youtube.com/watch?v=${youtubeVideoId}&t=${time}s`;
+  return `./video.mp4#t=${time}`;
+}
+
+function getTimelineDuration() {
+  return videoPlayer.duration && Number.isFinite(videoPlayer.duration)
+    ? videoPlayer.duration
+    : totalVideoDurationSeconds;
+}
+
+function updateTimelinePlayback() {
+  const duration = getTimelineDuration();
+  const progressPercent = Math.max(0, Math.min((videoPlayer.currentTime / duration) * 100, 100));
+
+  timelineProgress.style.width = `${progressPercent}%`;
+  timelinePlayhead.style.left = `${progressPercent}%`;
+}
+
+function updateActiveUI(entryId) {
+  activeSegmentId = entryId;
+
+  document.querySelectorAll(".result-card").forEach((item) => {
+    item.classList.toggle("is-active", item.dataset.entryId === String(entryId));
+  });
+
+  document.querySelectorAll(".timeline-segment").forEach((item) => {
+    item.classList.toggle("is-active", item.dataset.entryId === String(entryId));
+  });
+}
+
+function findEntryByTime(time) {
+  return transcriptEntries.find((entry) => time >= entry.start && time <= entry.end) || null;
 }
 
 function setActiveMoment(entry, card) {
-  videoFrame.src = buildEmbedUrl(entry.start);
   openVideoLink.href = buildWatchUrl(entry.start);
   activeTimestamp.textContent = `Selected segment: ${entry.label}`;
   jumpStatus.textContent = `Playing segment ${entry.label}...`;
+  segmentPlaybackEnd = entry.end;
+  updateActiveUI(entry.id);
 
-  document.querySelectorAll(".result-card").forEach((item) => {
-    item.classList.remove("is-active");
-  });
-  document.querySelectorAll(".timeline-segment").forEach((item) => {
-    item.classList.remove("is-active");
-  });
-
-  const activeCard = card || document.querySelector(`.result-card[data-entry-id="${entry.id}"]`);
-  if (activeCard) {
-    activeCard.classList.add("is-active");
-  }
-
-  const activeSegment = document.querySelector(`.timeline-segment[data-entry-id="${entry.id}"]`);
-  if (activeSegment) {
-    activeSegment.classList.add("is-active");
+  // Seek directly inside the local HTML5 video player.
+  videoPlayer.currentTime = entry.start;
+  const playPromise = videoPlayer.play();
+  if (playPromise && typeof playPromise.catch === "function") {
+    playPromise.catch(() => {
+      jumpStatus.textContent = `Ready to play segment ${entry.label}.`;
+    });
   }
 }
 
@@ -85,6 +113,7 @@ function renderResults(items) {
   items.forEach((entry) => {
     const card = resultTemplate.content.firstElementChild.cloneNode(true);
     const time = card.querySelector(".result-time");
+    const title = card.querySelector(".result-title");
     const text = card.querySelector(".result-text");
     card.dataset.entryId = String(entry.id);
 
@@ -94,7 +123,8 @@ function renderResults(items) {
     });
 
     time.textContent = entry.label;
-    text.textContent = entry.text;
+    title.textContent = entry.title;
+    text.textContent = entry.summary;
 
     resultsList.appendChild(card);
   });
@@ -104,7 +134,10 @@ function renderIdleState() {
   resultsCount.textContent = "0 matches";
   resultsList.innerHTML =
     '<div class="empty-state">Ask about a concept from the video, like "symbols", "breadcrumbs", or "filter".</div>';
-  timelineRail.innerHTML = "";
+  timelineSegments.innerHTML = "";
+  updateActiveUI(null);
+  panelNote.textContent = "Mock data only for this step.";
+  panelNote.classList.remove("is-thinking");
 }
 
 // Keep the first-pass search lightweight but a bit more forgiving.
@@ -119,13 +152,12 @@ function filterTranscript(query) {
   const queryWords = normalizedQuery.split(/\s+/);
 
   return transcriptEntries.filter((entry) => {
-    const text = entry.text.toLowerCase();
-    return queryWords.every((word) => text.includes(word));
+    const haystack = `${entry.title} ${entry.summary}`.toLowerCase();
+    return queryWords.every((word) => haystack.includes(word));
   });
 }
 
-function handleQueryChange(event) {
-  const query = event.target.value;
+function runSearch(query) {
   const normalizedQuery = query.trim();
 
   if (!normalizedQuery) {
@@ -134,9 +166,37 @@ function handleQueryChange(event) {
     return;
   }
 
-  const matches = filterTranscript(query);
-  renderResults(matches);
-  renderTimelineSegments(matches);
+  jumpStatus.textContent = 'PromptFind is thinking...';
+  panelNote.textContent = "Generating mock AI summaries...";
+  panelNote.classList.add("is-thinking");
+
+  window.clearTimeout(searchTimeoutId);
+  searchTimeoutId = window.setTimeout(() => {
+    const matches = filterTranscript(query);
+    renderResults(matches);
+    renderTimelineSegments(matches);
+    jumpStatus.textContent = `${matches.length} result${matches.length === 1 ? "" : "s"} ready.`;
+    panelNote.textContent = "Mock data only for this step.";
+    panelNote.classList.remove("is-thinking");
+  }, 320);
+}
+
+function resetAskPanel() {
+  window.clearTimeout(searchTimeoutId);
+  panelQueryInput.value = "";
+  jumpStatus.textContent = "Ask a question to see matching moments.";
+  renderIdleState();
+}
+
+function handleSearchSubmit() {
+  runSearch(panelQueryInput.value);
+}
+
+function handlePanelKeydown(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    handleSearchSubmit();
+  }
 }
 
 // Keep the top bar as visual YouTube chrome, but route search behavior through the Ask panel.
@@ -144,8 +204,38 @@ topbarSearchInput.addEventListener("focus", () => {
   panelQueryInput.focus();
 });
 
-panelQueryInput.addEventListener("input", handleQueryChange);
+panelSendButton.addEventListener("click", handleSearchSubmit);
+panelQueryInput.addEventListener("keydown", handlePanelKeydown);
+panelCloseButton.addEventListener("click", resetAskPanel);
+
+videoPlayer.addEventListener("timeupdate", () => {
+  updateTimelinePlayback();
+  const currentEntry = findEntryByTime(videoPlayer.currentTime);
+
+  if (currentEntry && currentEntry.id !== activeSegmentId) {
+    activeTimestamp.textContent = `Selected segment: ${currentEntry.label}`;
+    jumpStatus.textContent = `Playing segment ${currentEntry.label}...`;
+    openVideoLink.href = buildWatchUrl(currentEntry.start);
+    updateActiveUI(currentEntry.id);
+  }
+
+  if (segmentPlaybackEnd !== null && videoPlayer.currentTime >= segmentPlaybackEnd) {
+    videoPlayer.pause();
+    segmentPlaybackEnd = null;
+    if (currentEntry) {
+      jumpStatus.textContent = `Finished segment ${currentEntry.label}.`;
+    }
+  }
+});
+
+videoPlayer.addEventListener("loadedmetadata", () => {
+  updateTimelinePlayback();
+});
 
 // Keep the player at the start of the video, but do not show Ask results until a query exists.
 renderIdleState();
-setActiveMoment(transcriptEntries[0], null);
+videoPlayer.currentTime = transcriptEntries[0].start;
+openVideoLink.href = buildWatchUrl(transcriptEntries[0].start);
+activeTimestamp.textContent = `Selected segment: ${transcriptEntries[0].label}`;
+jumpStatus.textContent = "Ask a question to see matching moments.";
+updateTimelinePlayback();
