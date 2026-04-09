@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>PromptFind</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=webscience2" />
   </head>
   <body>
     <header class="topbar">
@@ -61,43 +61,62 @@
           <div class="player-shell">
             <div class="video-frame">
               <video id="videoPlayer" class="video-player" controls preload="metadata">
-                <source src="./video.mp4" type="video/mp4" />
+                <source src="./video.webm" type="video/webm" />
                 Your browser does not support HTML5 video.
               </video>
             </div>
           </div>
           <div class="moment-timeline" aria-label="PromptFind video moments">
-            <div id="timelineRail" class="timeline-rail">
-              <div id="timelineProgress" class="timeline-progress"></div>
-              <div id="timelineSegments" class="timeline-segments"></div>
+            <div id="timelineRuler" class="timeline-ruler"></div>
+            <div id="timelineBody" class="timeline-body">
+              <div id="timelineTracks" class="timeline-tracks"></div>
+              <div id="timelineRail" class="timeline-rail">
+                <div id="timelineProgress" class="timeline-progress"></div>
+              </div>
               <div id="timelinePlayhead" class="timeline-playhead"></div>
+              <div id="timelineTooltip" class="timeline-tooltip is-hidden"></div>
             </div>
           </div>
 
           <section class="video-meta">
-            <h1 class="video-title">The new symbol browser experience in Xcode</h1>
+            <h1 class="video-title">What is Web Science?</h1>
 
             <div class="watch-row">
-              <div class="channel-block">
-                <div class="channel-avatar" aria-hidden="true">LJ</div>
-                <div class="channel-copy">
-                  <p class="channel-name">Ladan Johari</p>
-                  <p class="channel-stats">9 subscribers</p>
+              <div class="watch-row-left">
+                <div class="channel-block">
+                  <div class="channel-avatar" aria-hidden="true">LJ</div>
+                  <div class="channel-copy">
+                    <p class="channel-name">Ladan Johari</p>
+                    <p class="channel-stats">9 subscribers</p>
+                  </div>
                 </div>
               </div>
 
-              <div class="action-row">
-                <button class="pill-button" type="button">Analytics</button>
-                <button class="pill-button" type="button">Edit video</button>
-              </div>
-            </div>
-
-            <div class="watch-row secondary">
               <div class="reaction-group">
-                <button class="icon-pill" type="button">2</button>
-                <button class="icon-pill" type="button">Share</button>
-                <button class="icon-pill" type="button">Promote</button>
-                <button class="icon-pill" type="button">Ask</button>
+                <button class="pill-button pill-button-join" type="button">Join</button>
+                <button class="icon-pill icon-pill-notify" type="button">
+                  <span class="pill-icon">🔔</span>
+                  <span class="pill-icon pill-icon-chevron">⌄</span>
+                </button>
+                <button class="icon-pill icon-pill-count" type="button">
+                  <span class="pill-icon">👍</span>
+                  <span>2</span>
+                  <span class="pill-divider" aria-hidden="true"></span>
+                  <span class="pill-icon">👎</span>
+                </button>
+                <button class="icon-pill" type="button">
+                  <span class="pill-icon">↗</span>
+                  <span>Share</span>
+                </button>
+                <button class="icon-pill" type="button">
+                  <span class="pill-icon">📣</span>
+                  <span>Promote</span>
+                </button>
+                <button id="openAskPanelButton" class="icon-pill" type="button">
+                  <span class="pill-icon">✦</span>
+                  <span>Ask</span>
+                </button>
+                <button class="icon-pill icon-pill-more" type="button">•••</button>
               </div>
             </div>
 
@@ -123,7 +142,7 @@
               <a
                 id="openVideoLink"
                 class="video-link"
-                href="./video.mp4"
+                href="./video.webm"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -133,7 +152,7 @@
           </section>
         </div>
 
-        <aside class="watch-sidebar">
+        <aside id="watchSidebar" class="watch-sidebar is-hidden">
           <section class="results-panel">
             <div class="results-header">
               <h2>Ask about this video</h2>
@@ -150,8 +169,8 @@
             <div class="ask-intro">
               <div class="sparkle-mark" aria-hidden="true">✦</div>
               <p class="search-hint">
-                PromptFind turns findings into navigation. Search the mock transcript and
-                jump directly to the relevant moment.
+                PromptFind turns findings into navigation. Search the mock Web Science
+                summaries and jump directly to the relevant moment.
               </p>
             </div>
 
@@ -209,7 +228,7 @@
       </button>
     </template>
 
-    <script src="data.js"></script>
-    <script src="app.js"></script>
+    <script src="data.js?v=webscience2"></script>
+    <script src="app.js?v=webscience2"></script>
   </body>
 </html>

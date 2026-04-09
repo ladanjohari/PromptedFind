@@ -1,62 +1,87 @@
-// Mock AI-style summaries for semantic video ranges.
+// Mock AI-style summaries for the "What is Web Science?" video.
 // These are hand-written summaries, not real model output.
 const transcriptEntries = [
   {
     id: 1,
     start: 0,
-    end: 16,
-    label: "0:00-0:07",
-    title: "Navigation starts with search tradeoffs",
+    end: 34,
+    label: "0:00-0:34",
+    title: "Introducing Web Science",
     summary:
-      "The opening frames the problem: large Xcode projects force you to choose between quick symbol search and slower file-by-file navigation. The video sets up why this workflow feels fragmented.",
+      "The opening introduces Web Science as a field for studying the web itself, not just the technologies inside it. The framing suggests that the web must be understood as both a technical and social system.",
   },
   {
     id: 2,
-    start: 17,
-    end: 27,
-    label: "0:17-0:27",
-    title: "Breadcrumbs help, but stay narrow",
+    start: 18,
+    end: 58,
+    label: "0:18-0:58",
+    title: "The web as a socio-technical system",
     summary:
-      "This section explains that breadcrumbs are useful for local navigation, but they do not expose the full symbol landscape inside a target. The limitation is less about access and more about visibility.",
+      "This segment explains that the web cannot be understood through engineering alone. Human behavior, institutions, incentives, and social structures are presented as part of the same system.",
   },
   {
     id: 3,
-    start: 28,
-    end: 38,
-    label: "0:28-0:38",
-    title: "The symbol browser reframes navigation",
+    start: 42,
+    end: 88,
+    label: "0:42-1:28",
+    title: "Web Science connects many disciplines",
     summary:
-      "The new symbol browser is introduced as a different navigation model. Instead of starting from files, it starts from meaningful code structures like classes, structs, and protocols.",
+      "Here the speakers position Web Science as an interdisciplinary field. Computer science, sociology, law, economics, and network thinking all appear as relevant lenses for understanding the web.",
   },
   {
     id: 4,
-    start: 39,
-    end: 53,
-    label: "0:39-0:53",
-    title: "Organization shifts from files to symbols",
+    start: 74,
+    end: 126,
+    label: "1:14-2:06",
+    title: "Why the web needs new research methods",
     summary:
-      "Here the product value becomes clearer: the browser organizes code around the syntax and structure of the codebase rather than the file tree. The pitch is control, not just speed.",
+      "This range shifts into methodology. The idea is that the web evolves so quickly, and through so many interacting forces, that traditional single-discipline methods are not enough on their own.",
   },
   {
     id: 5,
-    start: 54,
-    end: 73,
-    label: "0:54-1:13",
-    title: "Direct access plus filtering reduces friction",
+    start: 112,
+    end: 168,
+    label: "1:52-2:48",
+    title: "People shape the web as much as code",
     summary:
-      "This range focuses on the practical interaction benefits: jumping directly into the syntax tree and filtering by name or symbol type. The experience is positioned as faster, cleaner, and more intentional.",
+      "The discussion emphasizes that the web is produced by users, communities, norms, and institutions as much as by software architecture. That makes social behavior part of the system design story.",
   },
   {
     id: 6,
-    start: 74,
-    end: 84,
-    label: "1:14-1:24",
-    title: "Closing claim: faster, smarter browsing",
+    start: 154,
+    end: 214,
+    label: "2:34-3:34",
+    title: "Understanding emergence and large-scale effects",
     summary:
-      "The ending compresses the product story into a simple benefit statement. It reinforces that the symbol browser is meant to improve how developers browse code, not just how they search it.",
+      "This segment focuses on how small local interactions can produce large-scale web phenomena. Web Science is presented as a way to study those emergent outcomes systematically.",
+  },
+  {
+    id: 7,
+    start: 198,
+    end: 250,
+    label: "3:18-4:10",
+    title: "The field combines analysis with design",
+    summary:
+      "The video suggests that Web Science is not only descriptive. It is also about designing better systems by understanding how technology, behavior, and policy interact.",
+  },
+  {
+    id: 8,
+    start: 228,
+    end: 274,
+    label: "3:48-4:34",
+    title: "Web Science as a long-term lens",
+    summary:
+      "This range frames Web Science as a durable perspective for studying the web over time. The core message is that the web should be examined as a living system with technical and human dimensions.",
+  },
+  {
+    id: 9,
+    start: 260,
+    end: 288,
+    label: "4:20-4:48",
+    title: "Closing takeaway",
+    summary:
+      "The ending leaves the viewer with a concise takeaway: Web Science exists to explain how the web works as a complex human and technical ecosystem, and why that matters.",
   },
 ];
 
-// The YouTube video ID is stored separately so the iframe URL is easy to update later.
-const youtubeVideoId = "b9VX6qipe84";
-const totalVideoDurationSeconds = 84;
+const totalVideoDurationSeconds = 288;
