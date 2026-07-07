@@ -4,6 +4,8 @@ PromptedFind is a design-engineer prototype for prompt-based navigation inside m
 
 Instead of forcing users to remember exact transcript wording, PromptedFind lets them ask for a moment in natural language, then turns the answer into something actionable: a set of meaningful ranges they can click to navigate the content.
 
+Full case study: [ladanjohari.com/projects/promptedfind.html](https://ladanjohari.com/projects/promptedfind.html)
+
 ## Demo Concept
 
 The current prototype explores PromptedFind inside a video-watch experience:
@@ -97,17 +99,16 @@ Current limitations:
 
 ## Repo Files
 
-- [index.html](/Users/ladanjohari/projects/PromptedFind/index.html): main watch-page structure
-- [styles.css](/Users/ladanjohari/projects/PromptedFind/styles.css): UI styling
-- [app.js](/Users/ladanjohari/projects/PromptedFind/app.js): interaction logic
-- [data.js](/Users/ladanjohari/projects/PromptedFind/data.js): mock semantic range data
-- [PRODUCT.md](/Users/ladanjohari/projects/PromptedFind/PRODUCT.md): product definition
-- [PROMPT_TEMPLATE.md](/Users/ladanjohari/projects/PromptedFind/PROMPT_TEMPLATE.md): reusable prompt for extending PromptedFind to other platforms
+- [index.html](index.html): main watch-page structure
+- [styles.css](styles.css): UI styling
+- [app.js](app.js): interaction logic
+- [data.js](data.js): mock semantic range data
+- [PRODUCT.md](PRODUCT.md): product definition
+- [PROMPT_TEMPLATE.md](PROMPT_TEMPLATE.md): reusable prompt for extending PromptedFind to other platforms
 
 ## Local Run
 
 ```bash
-cd /Users/ladanjohari/projects/PromptedFind
 python3 -m http.server 8000
 ```
 
