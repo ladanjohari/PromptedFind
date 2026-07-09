@@ -6,6 +6,8 @@ Instead of forcing users to remember exact transcript wording, PromptedFind lets
 
 Full case study: [ladanjohari.com/projects/promptedfind.html](https://ladanjohari.com/projects/promptedfind.html)
 
+Note: this repo holds the earlier prototype; the case study shows the current build, which will be published here after its video assets are compressed for the web.
+
 ## Demo Concept
 
 The current prototype explores PromptedFind inside a video-watch experience:
